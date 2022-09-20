@@ -19,9 +19,6 @@
         </activity>
         <activity android:name=".StaticAsyncTaskActivity" />
         <activity android:name=".AsyncTaskActivity" />
-        <activity android:name=".HandlerActivity" />
-        <activity android:name=".SingletonActivity" />
-        <activity android:name=".ThreadActivity" />
     </application>
 
 </manifest>

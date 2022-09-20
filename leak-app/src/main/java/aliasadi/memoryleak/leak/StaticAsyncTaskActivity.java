@@ -1,20 +1,23 @@
 package aliasadi.memoryleak.leak;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+
 import android.widget.TextView;
 
-public class StaticAsyncTaskActivity extends Activity implements DownloadListener {
+import aliasadi.memoryleak.leak.R;
+
+public class StaticAsyncTaskActivity extends Activity {
+
     private TextView textView;
 
     /**
-     * NOTE : if the task done before rotate/close the listener every thing will be ok without leak.
-     * **/
+     * NOTE : if the task done before rotate/close the activity every thing will be ok without leak.
+     **/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +25,11 @@ public class StaticAsyncTaskActivity extends Activity implements DownloadListene
         setContentView(R.layout.activity_hello_world);
         textView = findViewById(R.id.text_view);
 
-        new DownloadTask(this).execute();
+        new DownloadTask().execute();
+    }
+
+    public void updateText() {
+        textView.setText(R.string.hello);
     }
 
     public static void start(Context context) {
@@ -30,27 +37,11 @@ public class StaticAsyncTaskActivity extends Activity implements DownloadListene
         context.startActivity(starter);
     }
 
-    public void updateText() {
-        textView.setText(R.string.hello);
-    }
-
-    @Override
-    public void onDownloadTaskDone() {
-        updateText();
-    }
-
+    /**
+     * to fix this leak we use static class instead of inner class.
+     * static class does not have reference to the containing activity class
+     **/
     private static class DownloadTask extends AsyncTask<Void, Void, Void> {
-
-        /**
-         * Saving a strong reference of the listener, which made
-         * the listener not eligible for garbage collection.
-         * **/
-        @SuppressLint("StaticFieldLeak")
-        private DownloadListener listener;
-
-        public DownloadTask(DownloadListener listener) {
-            this.listener = listener;
-        }
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -58,14 +49,16 @@ public class StaticAsyncTaskActivity extends Activity implements DownloadListene
             return null;
         }
 
+        /**
+         * Problem:
+         * we still need a reference to activity or listener to run the updateText() method
+         * what we should do? go to the next example at @StaticAsyncTask class to know how
+         * to deal with this issue.
+         **/
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            try {
-                listener.onDownloadTaskDone();
-            } catch (Exception e) {
-                //doNothing
-            }
+            //updateText();
         }
     }
 }

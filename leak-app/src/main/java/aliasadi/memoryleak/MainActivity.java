@@ -8,10 +8,7 @@ import android.view.View;
 import aliasadi.memoryleak.leak.R;
 
 import aliasadi.memoryleak.leak.AsyncTaskActivity;
-import aliasadi.memoryleak.leak.HandlerActivity;
-import aliasadi.memoryleak.leak.SingletonActivity;
 import aliasadi.memoryleak.leak.StaticAsyncTaskActivity;
-import aliasadi.memoryleak.leak.ThreadActivity;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -22,8 +19,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         findViewById(R.id.asyncTask).setOnClickListener(this);
         findViewById(R.id.staticAsyncTask).setOnClickListener(this);
-        findViewById(R.id.thread).setOnClickListener(this);
-        findViewById(R.id.handler).setOnClickListener(this);
     }
 
     @Override
@@ -35,12 +30,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.staticAsyncTask:
                 StaticAsyncTaskActivity.start(this);
-                break;
-            case R.id.thread:
-                ThreadActivity.start(this);
-                break;
-            case R.id.handler:
-                HandlerActivity.start(this);
                 break;
         }
     }

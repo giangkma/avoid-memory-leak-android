@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.TextView;
 
-import aliasadi.memoryleak.leak.R;
-
 public class AsyncTaskActivity extends Activity {
 
     /**
